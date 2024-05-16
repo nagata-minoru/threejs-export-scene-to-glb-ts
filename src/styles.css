@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+}
+
+.container button {
+  height: 40px;
+  width: 200px;
+  margin-left: 10px;  /* 左のマージンを設定 */
+  margin-right: 10px; /* 右のマージンを設定 */
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+canvas {
+  background-color: aqua;
+}
