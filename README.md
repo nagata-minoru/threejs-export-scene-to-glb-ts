@@ -20,3 +20,9 @@ LiveViewer等でdist/index.htmlを開く。
 ```
 npm run deploy
 ```
+
+## TEST
+
+```
+npm run test
+```

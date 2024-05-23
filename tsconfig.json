@@ -5,9 +5,10 @@
     "strict": true,
     "moduleResolution": "node",
     "outDir": "./dist",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["jest", "node"],
     "allowJs": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules"]
 }
