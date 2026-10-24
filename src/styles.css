@@ -17,5 +17,6 @@ body {
 }
 
 canvas {
+  display: block; /* インライン要素の下にできる隙間を無くす */
   background-color: aqua;
 }
