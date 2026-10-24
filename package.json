@@ -6,10 +6,10 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@types/three": "^0.164.0",
     "three": "^0.186.1"
   },
   "devDependencies": {
+    "@types/three": "^0.186.0",
     "css-loader": "^7.1.5",
     "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.6.8",
