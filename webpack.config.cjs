@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  mode: 'development', // 開発中は 'development'、本番環境では 'production' を使う
   entry: [
     './src/index.ts',
     './src/styles.css'
