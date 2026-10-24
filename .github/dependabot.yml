@@ -14,3 +14,7 @@ updates:
       security:
         applies-to: security-updates
         patterns: ['*']
+    # TypeScript 7 は ts-loader が未対応のため、メジャー版の更新は当面受け取らない
+    ignore:
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
