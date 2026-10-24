@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -6,5 +7,9 @@ export default defineConfig({
   build: {
     // three.js 本体だけで 500kB を超えるため、警告の閾値を引き上げる
     chunkSizeWarningLimit: 1000,
+  },
+  test: {
+    // e2e/ 以下は Playwright で実行するため、単体テストの対象から外す
+    include: ['src/**/*.test.ts'],
   },
 });
