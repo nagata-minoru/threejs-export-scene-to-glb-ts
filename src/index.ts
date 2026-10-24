@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+import { exportSceneAsGlb } from './exportScene';
+import { fitCameraToObject } from './fitCamera';
 
 // canvas要素を選択して3Dシーンを準備するためのコードです🌍
 const canvas = document.querySelector('.webgl') as HTMLCanvasElement;
@@ -47,37 +49,10 @@ document.getElementById('file-input')!.onchange = (event) => {
       scene.add(gltf.scene); // 解析が完了したGLTFモデルをシーンに追加します🎬
       console.log('GLB file loaded and added to the scene.'); // ログを出力します。
 
-      // モデルのバウンディングボックスを計算して、カメラの位置を調整するための処理を以下で行います📏📐
-      const box = new THREE.Box3().setFromObject(gltf.scene!);
-      const center = box.getCenter(new THREE.Vector3());
-      const size = box.getSize(new THREE.Vector3());
-
-      // ビューポートに合わせてカメラの位置を調整
-      // モデルを包む球が、縦・横のうち狭い方の視野角に収まる距離を求めます
-      const radius = size.length() / 2;
-      const vFov = camera.fov * (Math.PI / 180);
-      const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-      let cameraZ = radius / Math.sin(Math.min(vFov, hFov) / 2);
-
-      // カメラが近すぎる場合や遠すぎる場合の微調整
-      cameraZ *= 1.2; // オブジェクトに少し余裕を持たせる
-      camera.position.z = center.z + cameraZ;
-
-      // モデルの大きさに合わせて描画範囲を調整し、大きなモデルが切れないようにします
-      camera.near = cameraZ / 100;
-      camera.far = cameraZ * 100;
-      camera.updateProjectionMatrix();
-
-      // 新しい位置からのオブジェクトの注視点を設定
-      const direction = new THREE.Vector3().subVectors(camera.position, center).normalize();
-      camera.position.addVectors(center, direction.multiplyScalar(cameraZ));
-      camera.lookAt(center);
-
-      // カメラコントロールを更新（必要な場合）
-      if (controls) {
-        controls.target.copy(center);
-        controls.update();
-      }
+      // モデル全体が画面に収まるようにカメラを調整し、カメラコントロールの注視点も合わせます📏📐
+      const center = fitCameraToObject(camera, gltf.scene);
+      controls.target.copy(center);
+      controls.update();
     }, (error) => {
       console.log('An error happened while loading the GLB file:', error); // エラーが発生した場合にログを出力します。
     });
@@ -99,21 +74,10 @@ const save = (blob: Blob, filename: string) => {
  * GLBフォーマットで3Dシーンをエクスポートし、保存する関数を実行します。
  */
 document.getElementById('download-glb')!.onclick = () => {
-  // エクスポート対象から除外するオブジェクトです。成功・失敗どちらの場合も必ずシーンに戻します🔁
-  const excluded = [camera, directionalLight1, directionalLight2, ambientLight];
-  scene.remove(...excluded);
-  (new GLTFExporter()).parse(
-    scene,
-    (gltf) => {
-      scene.add(...excluded);
-      save(new Blob([gltf as ArrayBuffer], { type: 'application/octet-stream' }), 'scene.glb');
-    },
-    (error) => {
-      scene.add(...excluded);
-      console.log(error);
-    },
-    { binary: true }
-  );
+  // カメラとライトはエクスポート対象から除外します
+  exportSceneAsGlb(scene, [camera, directionalLight1, directionalLight2, ambientLight])
+    .then((glb) => save(new Blob([glb], { type: 'application/octet-stream' }), 'scene.glb'))
+    .catch((error) => console.log(error));
 };
 
 // ビューポートのサイズを設定するコードです📐

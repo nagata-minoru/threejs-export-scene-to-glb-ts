@@ -18,3 +18,13 @@ updates:
     ignore:
       - dependency-name: typescript
         update-types: ['version-update:semver-major']
+  # GitHub Actions のバージョン(コミット SHA で固定)も週1回更新する
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    groups:
+      actions:
+        patterns: ['*']
