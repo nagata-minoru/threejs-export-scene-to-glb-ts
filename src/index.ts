@@ -92,20 +92,19 @@ const save = (blob: Blob, filename: string) => {
  * GLBフォーマットで3Dシーンをエクスポートし、保存する関数を実行します。
  */
 document.getElementById('download-glb')!.onclick = () => {
-  scene.remove(camera);
-  scene.remove(directionalLight1);
-  scene.remove(directionalLight2);
-  scene.remove(ambientLight);
+  // エクスポート対象から除外するオブジェクトです。成功・失敗どちらの場合も必ずシーンに戻します🔁
+  const excluded = [camera, directionalLight1, directionalLight2, ambientLight];
+  scene.remove(...excluded);
   (new GLTFExporter()).parse(
     scene,
     (gltf) => {
-      scene.add(camera);
-      scene.add(directionalLight1);
-      scene.add(directionalLight2);
-      scene.add(ambientLight);
+      scene.add(...excluded);
       save(new Blob([gltf as ArrayBuffer], { type: 'application/octet-stream' }), 'scene.glb');
     },
-    (error) => console.log(error),
+    (error) => {
+      scene.add(...excluded);
+      console.log(error);
+    },
     { binary: true }
   );
 };
@@ -129,6 +128,18 @@ controls.enableDamping = true;
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// ウィンドウサイズの変更に合わせてカメラとレンダラを更新するコードです↔️
+window.addEventListener('resize', () => {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight - 60;
+
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
 
 /**
  * シーンをアニメーションさせるための関数です。フレームごとにこの関数が呼び出されます。

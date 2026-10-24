@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --devtool source-map",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },

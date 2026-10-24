@@ -4,11 +4,12 @@
 
 - [Node.js](https://nodejs.org)
 
-## TODO
+## セットアップ
 
 ```shell
 npm install
-npm run build
+npm run build        # 本番ビルド
+npm run build:dev    # 開発ビルド(ソースマップ付き・非圧縮)
 ```
 
 ## 使用方法
