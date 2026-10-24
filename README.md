@@ -8,13 +8,14 @@
 
 ```shell
 npm install
-npm run build        # 本番ビルド
-npm run build:dev    # 開発ビルド(ソースマップ付き・非圧縮)
+npm run dev          # 開発サーバ(http://localhost:5173)
+npm run build        # 本番ビルド(dist/ に出力)
+npm run preview      # ビルド結果をローカルで確認
 ```
 
 ## 使用方法
 
-LiveViewer等でdist/index.htmlを開く。
+`npm run dev` で起動した開発サーバをブラウザで開く。
 
 ## GitHub Pagesで公開
 

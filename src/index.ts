@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // canvas要素を選択して3Dシーンを準備するためのコードです🌍
 const canvas = document.querySelector('.webgl') as HTMLCanvasElement;
